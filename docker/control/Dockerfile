@@ -37,4 +37,7 @@ ADD ./init.sh /init.sh
 RUN dos2unix /init.sh /root/.bashrc \
     && chmod +x /init.sh
 
+RUN git clone --branch="no-download" https://github.com/richardsamuels/mongodb.git /jepsen/mongodb
+COPY list-append.sh /jepsen
+
 CMD /init.sh

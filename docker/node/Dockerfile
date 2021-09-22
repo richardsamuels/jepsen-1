@@ -32,5 +32,20 @@ ENV DEBBASE_SSH enabled
 # Install Jepsen deps
 RUN apt-get install -qy build-essential bzip2 curl dnsutils faketime iproute2 iptables iputils-ping libzip4 logrotate man man-db net-tools ntpdate psmisc python rsyslog sudo tar unzip vim wget ca-certificates
 
+# requirements for our build of mongod
+RUN apt-get install -qy libcurl4 libgssapi-krb5-2 libldap-2.4-2 libwrap0 libsasl2-2 libsasl2-modules snmp openssl liblzma5
+
+# Copy over binaries, config and systemd service
+COPY dist-test/bin/* /usr/bin/
+COPY mongod.service /lib/systemd/system
+COPY mongod.conf /etc/mongod.conf
+
+# setup the environment similarly to the .deb packages
+RUN useradd mongodb
+RUN mkdir /var/log/mongodb
+RUN chown mongodb:mongodb /var/log/mongodb
+RUN mkdir /var/lib/mongodb
+RUN chown mongodb:mongodb /var/lib/mongodb
+
 EXPOSE 22
 CMD ["/usr/local/bin/boot-debian-base"]
