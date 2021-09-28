@@ -37,4 +37,6 @@ ADD ./init.sh /init.sh
 RUN dos2unix /init.sh /root/.bashrc \
     && chmod +x /init.sh
 
+COPY mongodb /jepsen/mongodb
+
 CMD /init.sh
